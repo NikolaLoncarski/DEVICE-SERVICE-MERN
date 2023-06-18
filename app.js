@@ -7,7 +7,9 @@ const app = express();
 app.use(express.json());
 
 const userRoutes = require("./routes/userRoutes");
-
+const deviceRoutes = require("./routes/deviceRoutes");
+const modelRoutes = require("./routes/deviceSubRoutes/modelRoutes");
+const brandRoutes = require("./routes/deviceSubRoutes/brandRoutes");
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -20,5 +22,6 @@ mongoose
   });
 
 app.use("/user", userRoutes);
+app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 
 app.use(morgan("dev"));
