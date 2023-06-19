@@ -6,6 +6,8 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(express.json());
 
+const appError = require("./utils/appError");
+
 const userRoutes = require("./routes/userRoutes");
 const deviceRoutes = require("./routes/deviceRoutes");
 const modelRoutes = require("./routes/deviceSubRoutes/modelRoutes");
@@ -25,3 +27,7 @@ app.use("/user", userRoutes);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 
 app.use(morgan("dev"));
+
+app.all("*", (req, res, next) => {
+  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));
+});

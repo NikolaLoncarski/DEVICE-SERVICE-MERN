@@ -2,15 +2,14 @@ const User = require("../model/userModel");
 const AppError = require("../utils/appError");
 const tryCatch = require("../utils/tryCatch");
 
-// exports.createUser = tryCatch(async (req, res) => {
-//   const newUser = await User.create({
-//     userName: req.body.userName,
-//     email: req.body.email,
-//     password: req.body.password,
-//   });
+exports.getAllUsers = tryCatch(async (req, res, next) => {
+  const users = await User.find();
 
-//   res.status(201).json({
-//     status: "success",
-//     data: newUser,
-//   });
-// });
+  res.status(200).json({
+    status: "success",
+    results: users.length,
+    data: {
+      users,
+    },
+  });
+});
