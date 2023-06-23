@@ -16,9 +16,9 @@ const brandRoutes = require("./routes/deviceSubRoutes/brandRoutes");
 const appError = require("./utils/appError");
 const app = express();
 
-app.use(cors());
-app.options("*", cors());
-
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({origin: true, credentials: true}));
 app.use(helmet());
 app.use(express.json({ limit: "30kb" }));
 
@@ -40,7 +40,6 @@ mongoose
     });
   });
 
-app.use(cookieParser());
 app.use("/user", userRoutes);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 app.use(morgan("dev"));
