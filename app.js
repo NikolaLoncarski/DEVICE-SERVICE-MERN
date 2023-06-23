@@ -40,6 +40,7 @@ mongoose
     });
   });
 
+app.use(cookieParser());
 app.use("/user", userRoutes);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 app.use(morgan("dev"));
