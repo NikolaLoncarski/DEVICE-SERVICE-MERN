@@ -47,6 +47,7 @@ mongoose
     });
   });
 
+app.use(cookieParser());
 app.use("/user", userRoutes);
 app.use(auth.checkToken);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
