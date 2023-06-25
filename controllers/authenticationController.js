@@ -15,6 +15,8 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_CO0KIE_EXPIRES * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: "none",
+    secure: true,
   };
   res.cookie("jwt", token, cookieOptions);
 
@@ -51,3 +53,13 @@ exports.login = tryCatch(async (req, res, next) => {
   }
   createSendToken(user, 200, res);
 });
+
+// exports.checkToken = tryCatch(async (req, res, next) => {
+//   const token = await req.headers.authorization.split(" ")[1];
+//   if (!token) {
+//     return next(new AppError("Authentication failed!", 401));
+//   }
+//   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+//   req.userData = { id: decodedToken };
+//   next();
+// });

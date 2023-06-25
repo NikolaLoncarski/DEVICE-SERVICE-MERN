@@ -12,12 +12,19 @@ const userRoutes = require("./routes/userRoutes");
 const deviceRoutes = require("./routes/deviceRoutes");
 const modelRoutes = require("./routes/deviceSubRoutes/modelRoutes");
 const brandRoutes = require("./routes/deviceSubRoutes/brandRoutes");
+const auth = require("./controllers/authenticationController");
 
 const appError = require("./utils/appError");
 const app = express();
 
-app.use(cors());
-app.options("*", cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(helmet());
 app.use(express.json({ limit: "30kb" }));
@@ -41,6 +48,7 @@ mongoose
   });
 
 app.use("/user", userRoutes);
+// app.use(auth.checkToken);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 app.use(morgan("dev"));
 
