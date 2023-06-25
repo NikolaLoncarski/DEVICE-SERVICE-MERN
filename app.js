@@ -48,7 +48,7 @@ mongoose
   });
 
 app.use("/user", userRoutes);
-// app.use(auth.checkToken);
+app.use(auth.checkToken);
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
 app.use(morgan("dev"));
 
