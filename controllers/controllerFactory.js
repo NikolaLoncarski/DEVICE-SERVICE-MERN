@@ -15,7 +15,7 @@ exports.createOne = (Model) =>
 
 exports.getOne = (Model) =>
   tryCatch(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id).populate("deviceModelName");
+    const doc = await Model.findById(req.params.id);
 
     res.status(200).json({
       status: "success",

@@ -6,14 +6,14 @@ const deviceSchema = new mongoose.Schema(
       type: String,
       required: [true, "A device must have a type"],
     },
-    deviceModelName: [
+    deviceBrandName: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "Model",
+        ref: "Brand",
         required: [true, "A device must have a brand"],
       },
     ],
-    deviceBrandName: [
+    deviceModelName: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Model",

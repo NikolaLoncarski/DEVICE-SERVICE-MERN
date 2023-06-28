@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 dotenv.config({ path: "./config.env" });
 
 const userRoutes = require("./routes/userRoutes");
@@ -16,7 +17,8 @@ const auth = require("./controllers/authenticationController");
 
 const appError = require("./utils/appError");
 const app = express();
-
+app.use(express.json({ limit: "30kb" }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
@@ -25,16 +27,17 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
 
 app.use(helmet());
-app.use(express.json({ limit: "30kb" }));
+app.use(cookieParser());
 
-const limiter = rateLimit({
-  max: 250,
-  windowMs: 60 * 60 * 1000,
-  message: "To many requests from this IP, please try again in an hour",
-});
-app.use("/", limiter);
+// const limiter = rateLimit({
+//   max: 250,
+//   windowMs: 60 * 60 * 1000,
+//   message: "To many requests from this IP, please try again in an hour",
+// });
+// app.use("/", limiter);
 
 mongoose
   .connect(process.env.DATABASE, {
@@ -47,11 +50,14 @@ mongoose
     });
   });
 
-app.use(cookieParser());
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
+  next();
+});
 app.use("/user", userRoutes);
-app.use(auth.checkToken);
+
 app.use("/service", deviceRoutes, modelRoutes, brandRoutes);
-app.use(morgan("dev"));
 
 app.all("*", (req, res, next) => {
   next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));
